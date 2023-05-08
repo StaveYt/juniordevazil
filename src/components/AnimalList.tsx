@@ -18,11 +18,13 @@ function AnimalList(props) {
   useEffect(()=>{
     axios.get("http://localhost:3001/zivotinje").then(res=>setAnimals(res.data))
   },[])
-  
+  function handleFilter(){
+    
+  }
   return (
     <div>
-      <Navbar/>
-      <div className="container">
+      <Navbar admin={checkAdmin}/>
+      <div className="animal-list container">
         <div>
             <h3>Filter:</h3>
             <div>
@@ -51,7 +53,7 @@ function AnimalList(props) {
                 <label htmlFor="pas">Pas</label>
             </div>
         </div>
-        <div>
+        <div className="animal-container">
             {animals.map(animal=>(
             <AnimalCard setAnimals={setAnimals} admin={checkAdmin} animal={animal}/>
             ))}
