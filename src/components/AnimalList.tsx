@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AnimalCard from "./AnimalCard";
 import Navbar from "./Navbar";
+import Filter from "./Filter";
+
 function AnimalList(props) {
   
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-  const [animals, setAnimals]=useState([]) 
-
+  const [animals, setAnimals]=useState([])
+  const [shownAnimals, setShownAnimals]=useState([])
   const checkAdmin = () => {
     if (userInfo.userType == "admin") {
       return true;
@@ -16,46 +18,17 @@ function AnimalList(props) {
     }
   };
   useEffect(()=>{
-    axios.get("http://localhost:3001/zivotinje").then(res=>setAnimals(res.data))
+    axios.get("http://localhost:3001/zivotinje").then(res=>{setAnimals(res.data);setShownAnimals(res.data)})
   },[])
-  function handleFilter(){
-    
-  }
+  
   return (
     <div>
       <Navbar admin={checkAdmin}/>
       <div className="animal-list container">
-        <div>
-            <h3>Filter:</h3>
-            <div>
-                <input id="svi" type="radio" radioGroup="filter"></input>
-                <label htmlFor="svi">Svi</label>
-            </div>
-            <div>
-                <input id="udomljen" type="radio" radioGroup="filter"></input>
-                <label htmlFor="udomljen">Udomljen</label>
-            </div>
-            <div>
-                <input id="nijeUdomljen" type="radio" radioGroup="filter"></input>
-                <label htmlFor="nijeUdomljen">Nije udomljen</label>
-            </div>
-            <h3>Vrsta:</h3>
-            <div>
-                <input id="sve" type="radio" radioGroup="type"></input>
-                <label htmlFor="sve">Sve</label>
-            </div>
-            <div>
-                <input id="mačka" type="radio" radioGroup="type"></input>
-                <label htmlFor="mačka">Mačka</label>
-            </div>
-            <div>
-                <input id="pas" type="radio" radioGroup="type"></input>
-                <label htmlFor="pas">Pas</label>
-            </div>
-        </div>
+        <Filter animals={animals} shownAnimals={shownAnimals} setShownAnimals={setShownAnimals}/>
         <div className="animal-container">
-            {animals.map(animal=>(
-            <AnimalCard setAnimals={setAnimals} admin={checkAdmin} animal={animal}/>
+            {shownAnimals.map(animal=>(
+            <AnimalCard key={animal.id} setAnimals={setAnimals} admin={checkAdmin} animal={animal}/>
             ))}
         </div>
       </div>
