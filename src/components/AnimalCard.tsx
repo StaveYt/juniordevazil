@@ -20,28 +20,28 @@ function AnimalCard(props) {
 
   return (
     <div
-      className={animal.udomljen ? "kartica-udomljen" : "kartica-neudomljen"}
+      className={edit?"editcard":animal.udomljen ? "card-udomljen" : "card-neudomljen"}
     >
       {edit ? (
-        <AnimalEdit setEdit={setEdit} animal={animal} />
+        <AnimalEdit setAnimals={props.setAnimals} setEdit={setEdit} animal={animal} />
       ) : (
         <>
-          <div>
-            <img src={animal.slika} />
+          <div className="card-info">
+            <img className="card-img" src={animal.slika} />
             <div>
-              <h6>Ime: {animal.ime}</h6>
-              <h6>Vrsta: {animal.vrsta}</h6>
-              <h6>Godine: {animal.godine}</h6>
-              <h6>Posljednji pregled: {animal.pregled}</h6>
-              <h6>Status: {animal.udomljen ? "Udomljen" : "Nije Udomljen"}</h6>
-              <h6>Čip: {animal.cip ? "Ima" : "Nema"}</h6>
+              <p>Ime: {animal.ime}</p>
+              <p>Vrsta: {animal.vrsta}</p>
+              <p>Godine: {animal.godine}</p>
+              <p>Posljednji pregled: {animal.pregled}</p>
+              <p>Status: {animal.udomljen ? "Udomljen" : "Nije Udomljen"}</p>
+              <p>Čip: {animal.cip ? "Ima" : "Nema"}</p>
             </div>
           </div>
-          <div>
-            <h6>Opis:</h6>
+          <div className="card-desc">
+            <h3>Opis:</h3>
             <p>{animal.opis}</p>
           </div>
-          <div>
+          <div className="card-controls">
             {!animal.udomljen ? (
               <button onClick={handleAdopt}>Udomi</button>
             ) : (

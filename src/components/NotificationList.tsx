@@ -51,8 +51,8 @@ function NotificationList() {
 
   return (
     <div>
-      <Navbar/>
-      <div>
+      <Navbar admin={checkAdmin}/>
+      <div className="container">
         {checkAdmin()?(
         <button onClick={()=>setNewNotification(true)}>Nova Obavijest</button>
         ):(<></>)}

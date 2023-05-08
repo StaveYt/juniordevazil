@@ -81,7 +81,7 @@ function Donations(props) {
 
   return (
     <div>
-      <Navbar/>
+      <Navbar admin={admin}/>
       <div className="container">
         <button onClick={() => setNewDonation(true)}>Nova Donacija</button>
         {newDonation ? (
