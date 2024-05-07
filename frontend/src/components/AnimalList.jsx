@@ -7,28 +7,34 @@ import Filter from "./Filter";
 
 function AnimalList(props) {
   
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const [userRole, setUserRole] = useState(false);
   const [animals, setAnimals]=useState([])
   const [shownAnimals, setShownAnimals]=useState([])
-  const checkAdmin = () => {
-    if (userInfo.userType == "admin") {
-      return true;
-    } else {
-      return false;
-    }
-  };
   useEffect(()=>{
-    axios.get("http://localhost:3001/zivotinje").then(res=>{setAnimals(res.data);setShownAnimals(res.data)})
+    console.log(localStorage.getItem("token"))
+    axios.get("http://localhost:3000/animal/",{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }).then(res=>{setAnimals(res.data);setShownAnimals(res.data)})
+    axios.get("http://localhost:3000/user",{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }).then(res=>{
+      if(res.data.role == "admin") {setUserRole(true)}
+      else {setUserRole(false)}
+    })
   },[])
   
   return (
     <div>
-      <Navbar admin={checkAdmin}/>
+      <Navbar admin={userRole}/>
       <div className="animal-list container">
         <Filter animals={animals} shownAnimals={shownAnimals} setShownAnimals={setShownAnimals}/>
         <div className="animal-container">
             {shownAnimals.map(animal=>(
-            <AnimalCard key={animal.id} setAnimals={setAnimals} admin={checkAdmin} animal={animal}/>
+            <AnimalCard key={animal._id} setAnimals={setAnimals} admin={userRole} animal={animal}/>
             ))}
         </div>
       </div>

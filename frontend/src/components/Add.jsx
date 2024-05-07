@@ -4,14 +4,14 @@ import axios from "axios";
 
 function Add(){
   const [animalDef, setAnimalDef] = useState({
-    ime: "",
-    vrsta: "",
+    name: "",
+    type: "",
     cip: false,
-    godine: 0,
-    opis: true,
-    pregled: "",
-    udomljen: false,
-    slika:""
+    age: 0,
+    desc: true,
+    appoint: "",
+    adopted: false,
+    img:""
   })
   const [animal, setAnimal] = useState({...animalDef})
   
@@ -27,7 +27,11 @@ function Add(){
   }
   function addAnimal(event){
     event.preventDefault();
-    axios.post("http://localhost:3001/zivotinje", animal).then((rez) => {
+    axios.post("http://localhost:3000/animal", animal,{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }).then((rez) => {
       alert("Dodano")
       setAnimal({...animalDef});
     });

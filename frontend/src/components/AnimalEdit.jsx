@@ -3,27 +3,27 @@ import { useState } from "react"
 
 function AnimalEdit(props){
   const [animal, setAnimal] = useState({
-    ime: props.animal.ime,
-    vrsta: props.animal.vrsta,
+    name: props.animal.name,
+    type: props.animal.type,
     cip: props.animal.cip,
-    godine: props.animal.godine,
-    opis: props.animal.opis,
-    pregled: props.animal.pregled,
-    udomljen: props.animal.udomljen,
-    slika:props.animal.slika
+    age: props.animal.age,
+    desc: props.animal.desc,
+    appoint: props.animal.appoint,
+    adopted: props.animal.adopted,
+    img:props.animal.img
   })
 
   function handleChange(event){
     let value = event.target.value
 
     if(value =="on"){
-      if(event.target.id=="udomljen"){
-        value= !animal.udomljen
+      if(event.target.id=="adopted"){
+        value= !animal.adopted
       } else if (event.target.id=="cip"){
         value=!animal.cip
       }
     }
-    if(event.target.id=="slika"){
+    if(event.target.id=="img"){
       const file = event.target.files[0];
       const filePath = URL.createObjectURL(file);
       setAnimal({...animal,[event.target.id]:filePath});
@@ -35,19 +35,19 @@ function AnimalEdit(props){
   }
   function handleDelete(id){
     axios
-      .delete(`http://localhost:3001/zivotinje/${id}`)
+      .delete(`http://localhost:3000/animals/${id}`)
       .then((rez) =>
         axios
-          .get("http://localhost:3001/zivotinje")
+          .get("http://localhost:3000/animals")
           .then((res) => {props.setAnimals(res.data); props.setEdit(false)})
       );
   }
   function editAnimal(event){
     event.preventDefault()
     
-    axios.put(`http://localhost:3001/zivotinje/${props.animal.id}`, animal).then((rez) => {
+    axios.put(`http://localhost:3000/animals/${props.animal._id}`, animal).then((rez) => {
       axios
-        .get("http://localhost:3001/zivotinje")
+        .get("http://localhost:3000/animals")
         .then((rez) => {props.setAnimals(rez.data); props.setEdit(false)});
     });
   }
@@ -59,36 +59,36 @@ function AnimalEdit(props){
         <div>
           <div>
             <div>
-            <label htmlFor="slika">Izaberite sliku</label>
-            <input type={"file"} id="slika"></input>
+            <label htmlFor="img">Izaberite sliku</label>
+            <input type={"file"} id="img"></input>
             </div>
             
             <div>
-              <label htmlFor="ime">Ime:</label>
-              <input id="ime" value={animal.ime} onChange={handleChange}></input>
+              <label htmlFor="name">Ime:</label>
+              <input id="name" value={animal.name} onChange={handleChange}></input>
             </div>
             <div className="typesel">
               <label>Vrsta: </label>
               <div>
                 <label htmlFor="pas">Pas</label>
-                <input id="vrsta" name="pas" value="pas" checked={animal.vrsta==="pas"} type={"radio"} radioGroup="vrsta" onChange={handleChange}></input>
+                <input id="type" name="pas" value="pas" checked={animal.type==="pas"} type={"radio"} radioGroup="type" onChange={handleChange}></input>
               </div>
               <div>
                 <label htmlFor="macka">Mačka</label>
-                <input id="vrsta" name="macka" value="macka" checked={animal.vrsta==="macka"} type={"radio"} radioGroup="vrsta" onChange={handleChange}></input>
+                <input id="type" name="macka" value="macka" checked={animal.type==="macka"} type={"radio"} radioGroup="type" onChange={handleChange}></input>
               </div>
               <div>
                 <label htmlFor="ostalo">Ostalo</label>
-                <input id="vrsta" name="ostalo" value="ostalo" checked={animal.vrsta==="ostalo"} type={"radio"} radioGroup="vrsta" onChange={handleChange}></input>
+                <input id="type" name="ostalo" value="ostalo" checked={animal.type==="ostalo"} type={"radio"} radioGroup="type" onChange={handleChange}></input>
               </div>
             </div>
             <div>
-              <label htmlFor="godine">Godine:</label>
-              <input value={animal.godine} required id="godine" type={"number"} onChange={handleChange}></input>
+              <label htmlFor="age">Godine:</label>
+              <input value={animal.age} required id="age" type={"number"} onChange={handleChange}></input>
             </div>
             <div>
-              <label htmlFor="opis">Opis:</label>
-              <input id="opis" value={animal.opis} onChange={handleChange}></input>
+              <label htmlFor="desc">Opis:</label>
+              <input id="desc" value={animal.desc} onChange={handleChange}></input>
             </div>
           </div>
           <div>
@@ -97,17 +97,17 @@ function AnimalEdit(props){
               <input id="cip" checked={animal.cip} type={"checkbox"} onChange={handleChange}></input>
             </div>
             <div>
-              <label htmlFor="pregled">Pregled:</label>
-              <input id="pregled" value={animal.pregled} type={"date"} onChange={handleChange}></input>
+              <label htmlFor="appoint">Pregled:</label>
+              <input id="appoint" value={animal.appoint} type={"date"} onChange={handleChange}></input>
             </div>
             <div>
-              <label htmlFor="udomljen">Udomljen:</label>
-              <input id="udomljen" checked={animal.udomljen} type={"checkbox"} onChange={handleChange}></input>
+              <label htmlFor="adopted">Udomljen:</label>
+              <input id="adopted" checked={animal.adopted} type={"checkbox"} onChange={handleChange}></input>
             </div>
           </div>
         </div>
         <button type="submit">Spremi</button>
-        <button type="button" onClick={()=>handleDelete(props.animal.id)}>Izbriši</button>
+        <button type="button" onClick={()=>handleDelete(props.animal._id)}>Izbriši</button>
       </form>
     </>
   )

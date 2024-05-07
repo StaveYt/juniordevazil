@@ -1,10 +1,10 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Navbar(props) {
   const navigate = useNavigate();
   function logOut() {
-    localStorage.setItem("userLogged", false);
-    console.log();
+    localStorage.setItem("token", null);
     navigate("/login");
   }
   return (

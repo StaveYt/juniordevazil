@@ -7,12 +7,14 @@ import AboutUs from './components/AboutUs';
 import Donations from './components/Donations';
 import NotificationList from './components/NotificationList';
 import Add from './components/Add';
+
 function RequireLogIn({ children }) {
-  const loggedOn = localStorage.getItem("userLogged"); // zamjenit ovdi sa localstorage kako ces upisivat jel korisnik ulogiran
-  return loggedOn ? children : <Navigate to="/login" replace />;
+  const loggedOn = localStorage.getItem("token");
+  return loggedOn != null ? children : <Navigate to="/login" replace />;
 }
 
 function App() {
+  console.log(localStorage.getItem("token"))
   return (
     <BrowserRouter>
     <Routes>

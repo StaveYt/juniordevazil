@@ -1,11 +1,11 @@
 import { useForm } from "react-hook-form";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase.js";
 import Navbar from "./Navbar";
 
-function AboutUs(props) {
+function AboutUs() {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
 

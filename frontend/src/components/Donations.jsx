@@ -3,40 +3,51 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 
-function Donations(props) {
+function Donations() {
   const navigate = useNavigate();
   const [newDonation, setNewDonation] = useState(false);
-  const [category, setCategory] = useState("");
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const [donationInfo, setDonationInfo] = useState({
-    kategorija: "",
-    tip: "",
-    vrijednost: 0,
-    opis: "",
+    category: "",
+    type: "",
+    value: 0,
+    desc: "",
   });
   const [donations, setDonations] = useState([]);
   const [admin, setAdmin] = useState(false);
 
   useEffect(() => {
-    if (userInfo.userType == "admin") {
-      setDonationInfo({ ...donationInfo, kategorija: "trazi" });
+    if (userInfo.role == "admin") {
+      setDonationInfo({ ...donationInfo, category: "trazi" });
       setAdmin(true);
     } else {
-      setDonationInfo({ ...donationInfo, kategorija: "nudi" });
+      setDonationInfo({ ...donationInfo, category: "nudi" });
       setAdmin(false);
     }
     axios
-      .get("http://localhost:3001/donacije")
+      .get("http://localhost:3000/donation",{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
       .then((res) => setDonations(res.data));
   }, []);
 
   function addDonation(event) {
     event.preventDefault();
     setNewDonation(false);
-    axios.post("http://localhost:3001/donacije", donationInfo).then((rez) => {
+    axios.post("http://localhost:3000/donation", donationInfo,{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }).then((res) => {
       axios
-        .get("http://localhost:3001/donacije")
-        .then((rez) => setDonations(rez.data));
+        .get("http://localhost:3000/donation",{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
+        .then((res) => setDonations(res.data));
     });
   }
   function handleChange(event) {
@@ -44,37 +55,65 @@ function Donations(props) {
   }
   function deleteDonation(id) {
     axios
-      .delete(`http://localhost:3001/donacije/${id}`)
+      .delete(`http://localhost:3000/donation/${id}`,{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
       .then((rez) =>
         axios
-          .get("http://localhost:3001/donacije")
+          .get("http://localhost:3000/donation"),{
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
           .then((res) => setDonations(res.data))
       );
   }
   function handleDonated(id) {
     axios
-      .patch(`http://localhost:3001/donacije/${id}`, { kategorija: "donirano" })
+      .patch(`http://localhost:3000/donation/${id}`,{ category: "donirano" },{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
       .then((res) =>
         axios
-          .get("http://localhost:3001/donacije")
+          .get("http://localhost:3000/donation",{
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          })
           .then((res) => setDonations(res.data))
       );
   }
   function handleRepeat(id) {
     axios
-      .patch(`http://localhost:3001/donacije/${id}`, { kategorija: "trazi" })
+      .patch(`http://localhost:3000/donation/${id}`, { category: "trazi" })
       .then((res) =>
         axios
-          .get("http://localhost:3001/donacije")
+          .get("http://localhost:3000/donation",{
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          })
           .then((res) => setDonations(res.data))
       );
   }
   function handleAccepted(id) {
     axios
-      .patch(`http://localhost:3001/donacije/${id}`, { kategorija: "donirano" })
+      .patch(`http://localhost:3000/donation/${id}`,{ category: "donirano" },{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
       .then((res) =>
         axios
-          .get("http://localhost:3001/donacije")
+          .get("http://localhost:3000/donation",{
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          })
           .then((res) => setDonations(res.data))
       );
   }
@@ -87,21 +126,21 @@ function Donations(props) {
         {newDonation ? (
           <div>
             <form onSubmit={addDonation}>
-              <label htmlFor="tip">Izaberite tip donacije</label>
-              <select onChange={handleChange} id="tip" required>
+              <label htmlFor="type">Izaberite tip donacije</label>
+              <select onChange={handleChange} id="type" required>
                 <option>Hrana</option>
                 <option>Igračke</option>
                 <option>Ostalo</option>
               </select>
-              <label htmlFor="vrijednost">Izaberite vrijednost donacije</label>
+              <label htmlFor="value">Unesite vrijednost donacije</label>
               <input
                 onChange={handleChange}
-                id="vrijednost"
+                id="value"
                 type="number"
                 required
               ></input>
-              <label htmlFor="opis">Dodajte opis donacije</label>
-              <input onChange={handleChange} id="opis" required></input>
+              <label htmlFor="desc">Dodajte opis donacije</label>
+              <input onChange={handleChange} id="desc" required></input>
               <button>{admin ? "Dodaj Traženo" : "Dodaj Donaciju"}</button>
             </form>
           </div>
@@ -118,16 +157,16 @@ function Donations(props) {
           </thead>
           <tbody>
             {donations.map((donation) =>
-              donation.kategorija == "trazi" ? (
-                <tr key={donation.id}>
-                  <td>{donation.tip}</td>
-                  <td>{donation.vrijednost}</td>
-                  <td>{donation.opis}</td>
+              donation.category == "trazi" ? (
+                <tr key={donation._id}>
+                  <td>{donation.type}</td>
+                  <td>{donation.value}</td>
+                  <td>{donation.desc}</td>
                   <td>
                     {admin ? (
                       <>
-                        <button onClick={()=>handleDonated(donation.id)}>Donirano</button>
-                        <button onClick={() => deleteDonation(donation.id)}>
+                        <button onClick={()=>handleDonated(donation._id)}>Donirano</button>
+                        <button onClick={() => deleteDonation(donation._id)}>
                           Izbriši
                         </button>
                       </>
@@ -152,15 +191,15 @@ function Donations(props) {
           </thead>
           <tbody>
             {donations.map((donation) =>
-              donation.kategorija == "nudi" ? (
-                <tr key={donation.id}>
-                  <td>{donation.tip}</td>
-                  <td>{donation.vrijednost}</td>
-                  <td>{donation.opis}</td>
+              donation.category == "nudi" ? (
+                <tr key={donation._id}>
+                  <td>{donation.type}</td>
+                  <td>{donation.value}</td>
+                  <td>{donation.desc}</td>
                   <td>
                     {admin ? (
                       <>
-                        <button onClick={()=>handleAccepted(donation.id)}>Prihvati</button>
+                        <button onClick={()=>handleAccepted(donation._id)}>Prihvati</button>
                       </>
                     ) : (
                       <></>
@@ -183,16 +222,16 @@ function Donations(props) {
           </thead>
           <tbody>
             {donations.map((donation) =>
-              donation.kategorija == "donirano" ? (
-                <tr key={donation.id}>
-                  <td>{donation.tip}</td>
-                  <td>{donation.vrijednost}</td>
-                  <td>{donation.opis}</td>
+              donation.category == "donirano" ? (
+                <tr key={donation._id}>
+                  <td>{donation.type}</td>
+                  <td>{donation.value}</td>
+                  <td>{donation.desc}</td>
                   <td>
                     {admin ? (
                       <>
-                        <button onClick={()=>handleRepeat(donation.id)}>Ponovi</button>
-                        <button onClick={() => deleteDonation(donation.id)}>
+                        <button onClick={()=>handleRepeat(donation._id)}>Ponovi</button>
+                        <button onClick={() => deleteDonation(donation._id)}>
                           Izbriši
                         </button>
                       </>
