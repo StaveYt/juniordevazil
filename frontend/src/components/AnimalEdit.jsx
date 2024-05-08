@@ -35,19 +35,35 @@ function AnimalEdit(props){
   }
   function handleDelete(id){
     axios
-      .delete(`http://localhost:3000/animals/${id}`)
+      .delete(`http://localhost:3000/animal/${id}`,{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
       .then((rez) =>
         axios
-          .get("http://localhost:3000/animals")
+          .get("http://localhost:3000/animal",{
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          })
           .then((res) => {props.setAnimals(res.data); props.setEdit(false)})
       );
   }
   function editAnimal(event){
     event.preventDefault()
     
-    axios.put(`http://localhost:3000/animals/${props.animal._id}`, animal).then((rez) => {
+    axios.put(`http://localhost:3000/animal/${props.animal._id}`, animal,{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }).then((rez) => {
       axios
-        .get("http://localhost:3000/animals")
+        .get("http://localhost:3000/animal",{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
         .then((rez) => {props.setAnimals(rez.data); props.setEdit(false)});
     });
   }

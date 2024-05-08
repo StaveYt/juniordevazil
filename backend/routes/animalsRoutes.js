@@ -50,7 +50,7 @@ router.put("/:id", verifyToken("admin"), async (req,res,next)=>{
     }
 })
 
-router.patch("/:id", verifyToken("admin"), async (req,res,next)=>{
+router.patch("/:id", verifyToken("any"), async (req,res,next)=>{
     try {
         const animalId = req.params.id
         const animalInfo = req.body

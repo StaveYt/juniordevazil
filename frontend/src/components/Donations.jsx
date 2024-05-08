@@ -9,7 +9,7 @@ function Donations() {
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const [donationInfo, setDonationInfo] = useState({
     category: "",
-    type: "",
+    type: "hrana",
     value: 0,
     desc: "",
   });

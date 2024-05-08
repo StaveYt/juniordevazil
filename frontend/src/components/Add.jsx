@@ -17,7 +17,7 @@ function Add(){
   
 
   function handleChange(event){
-    if(event.target.id=="slika"){
+    if(event.target.id=="img"){
       const file = event.target.files[0];
       const filePath = URL.createObjectURL(file);
       setAnimal({...animal,[event.target.id]:filePath});
@@ -44,36 +44,36 @@ function Add(){
         <div>
           <div>
             <div>
-            <label htmlFor="slika">Izaberite sliku</label>
-            <input type={"file"} onChange={handleChange} id="slika"></input>
+            <label htmlFor="img">Izaberite sliku</label>
+            <input type={"file"} onChange={handleChange} id="img"></input>
               </div>
             
             <div>
-              <label htmlFor="ime">Ime:</label>
-              <input id="ime" onChange={handleChange}></input>
+              <label htmlFor="name">Ime:</label>
+              <input id="name" onChange={handleChange}></input>
             </div>
             <div>
               <label>Vrsta</label>
               <div>
                 <label htmlFor="pas">Pas</label>
-                <input checked={animal.vrsta==="pas"} name="pas" value="pas" id="vrsta" type={"radio"} radioGroup="vrsta" onChange={handleChange}></input>
+                <input checked={animal.type==="pas"} name="pas" value="pas" id="type" type={"radio"} radioGroup="type" onChange={handleChange}></input>
               </div>
               <div>
                 <label htmlFor="macka">Mačka</label>
-                <input id="vrsta" checked={animal.vrsta==="macka"} value="macka" name="macka" type={"radio"} radioGroup="vrsta" onChange={handleChange}></input>
+                <input id="type" checked={animal.type==="macka"} value="macka" name="macka" type={"radio"} radioGroup="type" onChange={handleChange}></input>
               </div>
               <div>
                 <label htmlFor="ostalo">Ostalo</label>
-                <input id="vrsta" checked={animal.vrsta==="ostalo"} value="ostalo" name="ostalo" type={"radio"} radioGroup="vrsta" onChange={handleChange}></input>
+                <input id="type" checked={animal.type==="ostalo"} value="ostalo" name="ostalo" type={"radio"} radioGroup="type" onChange={handleChange}></input>
               </div>
             </div>
             <div>
-              <label htmlFor="godine">Godine:</label>
-              <input required id="godine" type={"number"} onChange={handleChange}></input>
+              <label htmlFor="age">Godine:</label>
+              <input required id="age" type={"number"} onChange={handleChange}></input>
             </div>
             <div>
-              <label htmlFor="opis">Opis:</label>
-              <input id="opis" onChange={handleChange}></input>
+              <label htmlFor="desc">Opis:</label>
+              <input id="desc" onChange={handleChange}></input>
             </div>
           </div>
           <div>

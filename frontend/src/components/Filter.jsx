@@ -14,7 +14,7 @@ function Filter(props) {
  function handleFilter(type, adopted) {
     props.setShownAnimals(
       props.animals.filter((animal) => {
-        if (animal.vrsta == type || type == "svi") {
+        if (animal.type == type || type == "svi") {
           if (
             adopted == "svi" ||
             (adopted == "udomljen" && animal.adopted) ||
@@ -46,8 +46,8 @@ function Filter(props) {
         <input
           onChange={handleFilterAdopt}
           id="adopted"
-          value="adopted"
-          checked={selAdopted == "adopted"}
+          value="udomljen"
+          checked={selAdopted == "udomljen"}
           type="radio"
           radioGroup="filter"
         ></input>
@@ -57,8 +57,8 @@ function Filter(props) {
         <input
           onChange={handleFilterAdopt}
           id="notAdopted"
-          value="notAdopted"
-          checked={selAdopted == "notAdopted"}
+          value="nijeUdomljen"
+          checked={selAdopted == "nijeUdomljen"}
           type="radio"
           radioGroup="filter"
         ></input>
@@ -80,9 +80,9 @@ function Filter(props) {
         <input
           onChange={handleFilterType}
           id="macka"
-          value="mačka"
+          value="macka"
           type="radio"
-          checked={selType == "mačka"}
+          checked={selType == "macka"}
           radioGroup="type"
         ></input>
         <label htmlFor="macka">Mačka</label>

@@ -7,10 +7,18 @@ function AnimalCard(props) {
 
   function handleAdopt() {
     axios
-      .patch(`http://localhost:3000/animals/${animal._id}`, { adopted: true })
+      .patch(`http://localhost:3000/animal/${animal._id}`, { adopted: true },{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
       .then((res) =>
         axios
-          .get("http://localhost:3000/animals")
+          .get("http://localhost:3000/animal",{
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          })
           .then((res) => props.setAnimals(res.data))
       );
   }
@@ -18,7 +26,7 @@ function AnimalCard(props) {
     setEdit(true)
   }
 
-  return (
+  return ( 
     <div
       className={edit?"editcard":animal.udomljen ? "card-udomljen" : "card-neudomljen"}
     >
@@ -27,7 +35,7 @@ function AnimalCard(props) {
       ) : (
         <>
           <div className="card-info">
-            <img className="card-img" src={animal.slika} />
+            <img className="card-img" src={animal.img} />
             <div>
               <p>Ime: {animal.name}</p>
               <p>Vrsta: {animal.type}</p>
